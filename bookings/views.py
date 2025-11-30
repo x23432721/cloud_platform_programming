@@ -14,7 +14,7 @@ from .forms import UserRegisterForm, VehicleForm, BookingForm
 from .models import Service, Booking, Vehicle
 from .aws_utils import upload_file_to_s3, send_booking_to_sqs
 
-from autoservice_pro.autoservice_pro import ServiceEstimator, calculate_price
+from autoservice_pro import ServiceEstimator, calculate_price
 
 # create your views here.
 
@@ -74,95 +74,6 @@ def vehicle_create_view(request):
         form = VehicleForm()
     return render(request, "bookings/vehicle_create.html", {"form": form})
 
-
-
-# @login_required
-# def booking_create_view(request):
-#     if request.method == "POST":
-#         form = BookingForm(request.POST, request.FILES, user=request.user)
-#         if form.is_valid():
-#             booking = form.save(commit=False)
-#             booking.user = request.user
-
-#             photo = form.cleaned_data.get("vehicle_photo")
-#             if photo:
-#                 url = upload_file_to_s3(photo, key_prefix=f"user_{request.user.id}/bookings")
-#                 booking.vehicle_photo_url = url
-
-#             # Use autoservice_pro library for estimation
-#             service = booking.service
-#             estimator = ServiceEstimator()
-#             # Simple workload assumption: medium
-#             estimated_minutes = estimator.estimate_time(service_type=service.code, workload="medium")
-
-#             # Determine vehicle type from selected vehicle
-#             vehicle_type = booking.vehicle.vehicle_type
-#             estimated_price = calculate_price(
-#                 service_type=service.code,
-#                 vehicle_type=vehicle_type,
-#                 add_ons=[],
-#             )
-
-#             now = timezone.now()
-#             booking.estimated_completion_time = now + timedelta(minutes=estimated_minutes)
-#             booking.estimated_price = Decimal(str(estimated_price))
-
-#             booking.save()
-
-#             # Send message to SQS so Lambda can send SNS email
-#             send_booking_to_sqs(booking.id, request.user.email)
-
-#             return redirect("booking_success", pk=booking.id)
-#     else:
-#         form = BookingForm(user=request.user)
-
-#     return render(request, "bookings/booking_create.html", {"form": form})
-
-# @login_required
-# def booking_create_view(request):
-#     if request.method == "POST":
-#         form = BookingForm(request.POST, request.FILES, user=request.user)
-#         if form.is_valid():
-#             booking = form.save(commit=False)
-#             booking.user = request.user
-
-#             photo = form.cleaned_data.get("vehicle_photo")
-#             # print("DEBUG vehicle_photo:", photo)
-#             # print("DEBUG S3 bucket:", settings.AWS_S3_BUCKET)
-
-#             if photo:
-#                 url = upload_file_to_s3(photo, key_prefix=f"user_{request.user.id}/bookings")
-#                 print("DEBUG S3 returned URL:", url)
-#                 if url:
-#                     booking.vehicle_photo_url = url
-
-#             # --- rest of your code unchanged ---
-#             service = booking.service
-#             estimator = ServiceEstimator()
-#             estimated_minutes = estimator.estimate_time(service_type=service.code, workload="medium")
-
-#             vehicle_type = booking.vehicle.vehicle_type
-#             estimated_price = calculate_price(
-#                 service_type=service.code,
-#                 vehicle_type=vehicle_type,
-#                 add_ons=[],
-#             )
-
-#             now = timezone.now()
-#             booking.estimated_completion_time = now + timedelta(minutes=estimated_minutes)
-#             booking.estimated_price = Decimal(str(estimated_price))
-
-#             booking.save()
-
-#             send_booking_to_sqs(booking.id, request.user.email)
-
-#             return redirect("booking_success", pk=booking.id)
-#     else:
-#         form = BookingForm(user=request.user)
-
-#     return render(request, "bookings/booking_create.html", {"form": form})
-
-
 @login_required
 def booking_create_view(request):
     if request.method == "POST":
@@ -171,13 +82,11 @@ def booking_create_view(request):
             booking = form.save(commit=False)
             booking.user = request.user
 
-            # 1) Upload optional photo to S3
             photo = form.cleaned_data.get("vehicle_photo")
             if photo:
                 url = upload_file_to_s3(photo, key_prefix=f"user_{request.user.id}/bookings")
                 booking.vehicle_photo_url = url
 
-            # 2) Use autoservice_pro library for estimation
             service = booking.service
             estimator = ServiceEstimator()
             estimated_minutes = estimator.estimate_time(
@@ -196,10 +105,8 @@ def booking_create_view(request):
             booking.estimated_completion_time = now + timedelta(minutes=estimated_minutes)
             booking.estimated_price = Decimal(str(estimated_price))
 
-            # 3) Save booking to DB
             booking.save()
 
-            # 4) Send message to SQS (no email, just queue)
             message_id = send_booking_to_sqs(booking)
             print("DEBUG send_booking_to_sqs returned:", message_id)
 

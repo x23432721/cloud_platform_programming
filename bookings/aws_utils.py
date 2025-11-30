@@ -12,9 +12,7 @@ sqs_client = boto3.client("sqs", region_name=settings.AWS_REGION)
 
 
 def upload_file_to_s3(file_obj, key_prefix: str) -> str:
-    """
-    Uploads a file object to S3 and returns the public URL.
-    """
+
     bucket = settings.AWS_S3_BUCKET
     key = f"{key_prefix}/{file_obj.name}"
 
@@ -31,30 +29,7 @@ def upload_file_to_s3(file_obj, key_prefix: str) -> str:
 
     return f"https://{bucket}.s3.{settings.AWS_REGION}.amazonaws.com/{key}"
 
-
-# def send_booking_to_sqs(booking_id: int, user_email: str):
-#     """
-#     Sends a message to SQS for Lambda to process and trigger SNS.
-#     """
-#     message_body = {
-#         "booking_id": booking_id,
-#         "user_email": user_email,
-#     }
-
-#     try:
-#         sqs_client.send_message(
-#             QueueUrl=settings.AWS_SQS_QUEUE_URL,
-#             MessageBody=json.dumps(message_body),
-#         )
-#     except ClientError as e:
-#         print("Error sending message to SQS:", e)
-
 def send_booking_to_sqs(booking) -> str | None:
-    """
-    Sends a booking message to SQS.
-    Does NOT send any emails. Just queues the message.
-    Returns the SQS MessageId if successful, otherwise None.
-    """
 
     payload = {
         "booking_id": booking.id,

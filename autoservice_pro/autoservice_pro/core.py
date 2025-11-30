@@ -1,9 +1,6 @@
 from datetime import timedelta
 
 class ServiceEstimator:
-    """
-    Estimate service duration (in minutes) based on service_type and workload.
-    """
 
     BASE_TIMES = {
         "oil_change": 45,
@@ -30,9 +27,6 @@ def calculate_price(
     vehicle_type: str = "sedan",
     add_ons: list | None = None,
 ) -> float:
-    """
-    Calculate price based on service_type, vehicle_type and add-ons.
-    """
 
     if add_ons is None:
         add_ons = []
