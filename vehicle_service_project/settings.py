@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-_1qr5kt%lm**(wt_xf^6vt(g+ewcq*b&g$1iwn@#6t)&nj0mh5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['x23432721-env.eba-shnaqr3j.us-east-1.elasticbeanstalk.com']
 
 
 # Application definition
@@ -74,12 +74,12 @@ WSGI_APPLICATION = 'vehicle_service_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 
 # Password validation
@@ -157,4 +157,18 @@ AWS_S3_BUCKET = get_db_secret().get("s3_bucket_name")
 AWS_SQS_QUEUE_URL = get_db_secret().get("sqs_queue_url")
 AWS_SNS_TOPIC_ARN = get_db_secret().get("sns_topic_arn")
 
-print(AWS_SQS_QUEUE_URL)
+# print(AWS_SQS_QUEUE_URL)
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": get_db_secret().get("RDS_DATABASE"),
+        "USER": get_db_secret().get("RDS_USER"),
+        "PASSWORD": get_db_secret().get("RDS_PASSWORD"),
+        "HOST": get_db_secret().get("RDS_HOST"),
+        "PORT": get_db_secret().get("RDS_PORT"),
+    }   
+}
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 104857600  
+FILE_UPLOAD_MAX_MEMORY_SIZE = 104857600

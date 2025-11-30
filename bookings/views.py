@@ -108,7 +108,7 @@ def booking_create_view(request):
             booking.save()
 
             message_id = send_booking_to_sqs(booking)
-            print("DEBUG send_booking_to_sqs returned:", message_id)
+            # print("DEBUG send_booking_to_sqs returned:", message_id)
 
             return redirect("booking_success", pk=booking.id)
     else:
