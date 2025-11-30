@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2 class="mb-4">Booking Details</h2>
+
+<div class="card shadow-sm">
+  <div class="card-body">
+
+    <h4 class="mb-3">Booking #{{ booking.id }}</h4>
+
+    <!-- Status -->
+    <p>
+      <strong>Status:</strong>
+      <span class="badge 
+        {% if booking.status == 'pending' %} bg-warning text-dark
+        {% elif booking.status == 'in_progress' %} bg-info text-dark
+        {% elif booking.status == 'completed' %} bg-success
+        {% elif booking.status == 'collected' %} bg-secondary
+        {% else %} bg-light text-dark
+        {% endif %}
+      ">
+        {{ booking.get_status_display }}
+      </span>
+    </p>
+
+    <hr>
+
+    <!-- Vehicle Info -->
+    <h5 class="mt-3">Vehicle Information</h5>
+    <p class="mb-1"><strong>Vehicle:</strong> {{ booking.vehicle }}</p>
+    <p class="mb-1"><strong>Type:</strong> {{ booking.vehicle.get_vehicle_type_display }}</p>
+    <p class="mb-1"><strong>License Plate:</strong> {{ booking.vehicle.license_plate }}</p>
+
+    <hr>
+
+    <!-- Service Info -->
+    <h5 class="mt-3">Service Information</h5>
+    <p class="mb-1"><strong>Service:</strong> {{ booking.service.name }}</p>
+    <p class="mb-1"><strong>Description:</strong> {{ booking.service.description|default:"No description." }}</p>
+    <p class="mb-1"><strong>Preferred Date:</strong> {{ booking.preferred_date }}</p>
+
+    <hr>
+
+    <!-- Pricing & Estimate -->
+    <h5 class="mt-3">Estimations</h5>
+    <p class="mb-1">
+      <strong>Estimated Completion:</strong>
+      {{ booking.estimated_completion_time|default:"Pending calculation" }}
+    </p>
+    <p class="mb-1">
+      <strong>Estimated Price:</strong>
+      ${{ booking.estimated_price|default:"0.00" }}
+    </p>
+
+    <hr>
+
+    <!-- Photo -->
+    {% if booking.vehicle_photo_url %}
+      <h5 class="mt-3">Vehicle Photo</h5>
+      <img src="{{ booking.vehicle_photo_url }}" alt="Vehicle Photo"
+           class="img-fluid rounded shadow-sm mb-3" style="max-height: 300px; object-fit: cover;">
+    {% endif %}
+
+    <hr>
+
+    <!-- Notes -->
+    {% if booking.notes %}
+      <h5 class="mt-3">Notes</h5>
+      <p class="small text-muted">{{ booking.notes }}</p>
+    {% endif %}
+
+    <!-- Metadata -->
+    <p class="text-muted small mt-4">
+      <strong>Created:</strong> {{ booking.created_at }} <br>
+    </p>
+
+    <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary mt-3">
+      ← Back to Dashboard
+    </a>
+
+  </div>
+</div>
+
+{% endblock %}

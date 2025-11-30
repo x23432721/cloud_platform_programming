@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-3">Book a Service</h2>
+
+<div class="row">
+  <div class="col-md-7">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit" class="btn btn-primary w-100">Confirm Booking</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-5">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5>How it works</h5>
+        <ol class="small">
+          <li>Select your vehicle and service.</li>
+          <li>We estimate time &amp; price using our AutoService Pro engine.</li>
+          <li>Your request is queued via AWS SQS.</li>
+          <li>Lambda sends you an email via SNS with booking details.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

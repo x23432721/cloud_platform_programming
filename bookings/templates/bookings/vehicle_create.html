@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card shadow-sm">
+      <div class="card-body">
+
+        <h3 class="card-title mb-4 text-center">Add Vehicle</h3>
+
+        <form method="post">
+          {% csrf_token %}
+
+          <div class="mb-3">
+            <label class="form-label">Make</label>
+            {{ form.make }}
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Model</label>
+            {{ form.model }}
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Year</label>
+            {{ form.year }}
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Vehicle Type</label>
+            {{ form.vehicle_type }}
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">License Plate</label>
+            {{ form.license_plate }}
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100 mt-2">
+            Save Vehicle
+          </button>
+        </form>
+
+        <div class="text-center mt-3">
+          <a href="{% url 'dashboard' %}" class="text-decoration-none">
+            ← Back to Dashboard
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

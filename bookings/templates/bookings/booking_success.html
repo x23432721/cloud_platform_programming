@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card shadow-sm text-center">
+      <div class="card-body">
+        <h3 class="card-title mb-3">Booking Confirmed!</h3>
+        <p>Thank you, {{ booking.user.username }}. Your booking <strong>#{{ booking.id }}</strong> has been created.</p>
+        <p>Estimated price: <strong>${{ booking.estimated_price }}</strong></p>
+        <p>Estimated completion: <strong>{{ booking.estimated_completion_time }}</strong></p>
+        <p class="mt-3">
+          You will receive an email shortly with your booking details once our system processes it.
+        </p>
+        <a href="{% url 'dashboard' %}" class="btn btn-primary mt-2">Go to Dashboard</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

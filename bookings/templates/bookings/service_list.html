@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-3">Available Services</h2>
+
+{% if services %}
+<div class="row">
+  {% for s in services %}
+    <div class="col-md-4 mb-3">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <h5 class="card-title">{{ s.name }}</h5>
+          <p class="card-text small text-muted">
+            {{ s.description|default:"No description." }}
+          </p>
+
+          <p class="mb-1"><strong>Base time:</strong> {{ s.base_duration_minutes }} minutes</p>
+          <p class="mb-0"><strong>Base price:</strong> ${{ s.base_price }}</p>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+{% else %}
+<div class="alert alert-info text-center shadow-sm">
+  No services are available at the moment.
+  <br>
+  <small>Book Services Now!</small>
+</div>
+{% endif %}
+
+{% endblock %}

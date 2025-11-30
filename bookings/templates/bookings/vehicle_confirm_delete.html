@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card shadow-sm border-danger">
+      <div class="card-body">
+
+        <h3 class="card-title mb-3 text-center text-danger">
+          Delete Vehicle
+        </h3>
+
+        <p class="text-center">
+          Are you sure you want to delete this vehicle?
+        </p>
+
+        <ul class="list-group mb-3">
+          <li class="list-group-item">
+            <strong>Make:</strong> {{ vehicle.make }}
+          </li>
+          <li class="list-group-item">
+            <strong>Model:</strong> {{ vehicle.model }}
+          </li>
+          <li class="list-group-item">
+            <strong>Year:</strong> {{ vehicle.year }}
+          </li>
+          <li class="list-group-item">
+            <strong>License Plate:</strong> {{ vehicle.license_plate }}
+          </li>
+        </ul>
+
+        <form method="post" class="d-flex justify-content-between">
+          {% csrf_token %}
+          <a href="{% url 'vehicle_list' %}" class="btn btn-outline-secondary">
+            Cancel
+          </a>
+          <button type="submit" class="btn btn-danger">
+            Yes, delete
+          </button>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

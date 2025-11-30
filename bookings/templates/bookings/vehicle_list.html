@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2 class="mb-3">My Vehicles</h2>
+
+<div class="mb-3">
+  <a href="{% url 'vehicle_create' %}" class="btn btn-success">
+    + Add New Vehicle
+  </a>
+</div>
+
+{% if vehicles %}
+  <div class="table-responsive">
+    <table class="table table-striped align-middle">
+      <thead>
+        <tr>
+          <th>Make</th>
+          <th>Model</th>
+          <th>Year</th>
+          <th>Type</th>
+          <th>License Plate</th>
+          <th style="width: 150px;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for v in vehicles %}
+          <tr>
+            <td>{{ v.make }}</td>
+            <td>{{ v.model }}</td>
+            <td>{{ v.year }}</td>
+            <td>{{ v.get_vehicle_type_display }}</td>
+            <td>{{ v.license_plate }}</td>
+            <td>
+              <a href="{% url 'vehicle_edit' v.id %}" class="btn btn-sm btn-outline-primary">
+                Edit
+              </a>
+              <a href="{% url 'vehicle_delete' v.id %}" class="btn btn-sm btn-outline-danger ms-1">
+                Delete
+              </a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <div class="alert alert-info text-center shadow-sm">
+    You haven’t added any vehicles yet.
+    <br>
+    <a href="{% url 'vehicle_create' %}" class="btn btn-sm btn-primary mt-2">
+      Add your first vehicle
+    </a>
+  </div>
+{% endif %}
+
+{% endblock %}
