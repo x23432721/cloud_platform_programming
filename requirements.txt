@@ -5,6 +5,7 @@ botocore==1.41.2
 Django
 jmespath==1.0.1
 pillow==12.0.0
+pyscopg2-binary
 python-dateutil==2.9.0.post0
 s3transfer==0.15.0
 six==1.17.0
