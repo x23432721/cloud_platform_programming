@@ -101,8 +101,9 @@ def booking_create_view(request):
                 add_ons=[],
             )
 
-            now = timezone.now()
-            booking.estimated_completion_time = now + timedelta(minutes=estimated_minutes)
+            # now = timezone.now()
+            booked_date = booking.preferred_date
+            booking.estimated_completion_time = booked_date + timedelta(minutes=estimated_minutes)
             booking.estimated_price = Decimal(str(estimated_price))
 
             booking.save()
